@@ -6,10 +6,13 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/fix")
@@ -56,7 +59,36 @@ public class FixBinaryController {
                 ? converter.convertHex(request.hexData())
                 : converter.convertBase64(request.base64Data());
 
-        return new FixConversionResponse(asciiMessage, converter.toReadableFix(asciiMessage));
+            return buildResponse(asciiMessage);
+            }
+
+            @Operation(
+                summary = "Upload raw FIX binary file",
+                description = "Accepts a multipart file upload containing raw FIX binary bytes and returns both the ASCII FIX message and a readable version with SOH rendered as |.")
+            @ApiResponses({
+                @ApiResponse(responseCode = "200", description = "FIX file converted successfully"),
+                @ApiResponse(
+                    responseCode = "400",
+                    description = "Missing or empty file upload",
+                    content = @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = ApiErrorResponse.class),
+                        examples = @ExampleObject(value = "{\"message\":\"Multipart file 'file' is required\"}")))
+            })
+            @PostMapping(path = "/convert-file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+            public FixConversionResponse convertFile(
+                @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    required = true,
+                    content = @Content(
+                        mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
+                        schema = @Schema(type = "object", requiredProperties = {"file"})))
+                @RequestPart("file") MultipartFile file) {
+            validateFile(file);
+            try {
+                return buildResponse(converter.convert(file.getBytes()));
+            } catch (java.io.IOException exception) {
+                throw new IllegalArgumentException("Unable to read uploaded file", exception);
+            }
     }
 
     private void validateRequest(FixConversionRequest request) {
@@ -66,5 +98,18 @@ public class FixBinaryController {
         if (request.hasHexData() == request.hasBase64Data()) {
             throw new IllegalArgumentException("Provide exactly one of hexData or base64Data");
         }
+    }
+
+    private void validateFile(MultipartFile file) {
+        if (file == null) {
+            throw new IllegalArgumentException("Multipart file 'file' is required");
+        }
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("Uploaded file must not be empty");
+        }
+    }
+
+    private FixConversionResponse buildResponse(String asciiMessage) {
+        return new FixConversionResponse(asciiMessage, converter.toReadableFix(asciiMessage));
     }
 }

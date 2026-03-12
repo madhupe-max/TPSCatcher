@@ -42,6 +42,7 @@ Endpoint:
 
 ```text
 POST /api/fix/convert
+POST /api/fix/convert-file
 ```
 
 Hex request:
@@ -63,6 +64,15 @@ curl -X POST http://localhost:8080/api/fix/convert \
 		"base64Data": "OD1GSVguNC40ATk9MTIBMzU9MAE="
 	}'
 ```
+
+Multipart file upload:
+
+```bash
+curl -X POST http://localhost:8080/api/fix/convert-file \
+	-F "file=@/path/to/fix-message.bin;type=application/octet-stream"
+```
+
+Swagger UI also exposes this as a file picker on the `POST /api/fix/convert-file` operation.
 
 Example response:
 

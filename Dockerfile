@@ -1,5 +1,11 @@
 # ── Stage 1: build ───────────────────────────────────────────────────────────
-FROM maven:3.9-amazoncorretto-17 AS builder
+FROM ubuntu:22.04 AS builder
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends openjdk-17-jdk maven ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build
 
@@ -13,10 +19,16 @@ RUN --mount=type=cache,target=/root/.m2 \
     mvn --batch-mode package -DskipTests -q
 
 # ── Stage 2: runtime ─────────────────────────────────────────────────────────
-FROM amazoncorretto:17-alpine
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends openjdk-17-jre-headless ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 # Run as a non-root user for security
-RUN addgroup -S appgroup && adduser -S -G appgroup appuser
+RUN groupadd --system appgroup && useradd --system --gid appgroup appuser
 USER appuser
 
 WORKDIR /app

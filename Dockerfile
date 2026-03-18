@@ -1,5 +1,5 @@
 # ── Stage 1: build ───────────────────────────────────────────────────────────
-FROM ubuntu:22.04 AS builder
+FROM --platform=linux/amd64 ubuntu:22.04 AS builder
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -19,7 +19,7 @@ RUN --mount=type=cache,target=/root/.m2 \
     mvn --batch-mode package -DskipTests -q
 
 # ── Stage 2: runtime ─────────────────────────────────────────────────────────
-FROM ubuntu:22.04
+FROM --platform=linux/amd64 ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 

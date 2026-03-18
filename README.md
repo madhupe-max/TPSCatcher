@@ -22,6 +22,39 @@ mvn spring-boot:run
 
 The service starts on port `8080` by default.
 
+## Run with Docker
+
+Build the image from the project root:
+
+```bash
+docker build -t tpscatcher-api .
+```
+
+Run the container:
+
+```bash
+docker run --name tpscatcher-api -p 8080:8080 tpscatcher-api
+```
+
+Run in detached mode:
+
+```bash
+docker run -d --name tpscatcher-api -p 8080:8080 tpscatcher-api
+```
+
+Stop and remove the container:
+
+```bash
+docker rm -f tpscatcher-api
+```
+
+When running in Docker, the API is available at:
+
+```text
+http://localhost:8080/api/fix/convert
+http://localhost:8080/api/fix/convert-file
+```
+
 ## Swagger UI
 
 Once the application is running, open:

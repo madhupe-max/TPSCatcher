@@ -1,8 +1,0 @@
-com/tpscatcher/fix/FixConversionRequest.class
-com/tpscatcher/fix/ApiErrorResponse.class
-com/tpscatcher/fix/FixBinaryController.class
-com/tpscatcher/fix/GlobalExceptionHandler.class
-com/tpscatcher/fix/FixBinaryConverterApplication.class
-com/tpscatcher/fix/FixBinaryToAsciiService.class
-com/tpscatcher/fix/OpenApiConfig.class
-com/tpscatcher/fix/FixConversionResponse.class

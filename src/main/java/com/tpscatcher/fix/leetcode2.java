@@ -1,5 +1,8 @@
 package com.tpscatcher.fix;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class leetcode2 {
      
     public int minimumDeleteSum(String s1, String s2) {
@@ -33,6 +36,18 @@ public class leetcode2 {
         }
 
         return dp[m][n];
+    }
+
+public int lengthOfLongestSubstring(String s) {
+        Map <String, Integer> seen = new HashMap<>();
+        int len=0;
+        for(int i=0; i< s.length(); i++){
+            if(seen.containsKey(""+s.chartAt(i))){
+                return seen.length;
+            }
+            seen.put(s.charAt(i),i);
+        }
+        return len;
     }
 
     public static void main(String[] args) {

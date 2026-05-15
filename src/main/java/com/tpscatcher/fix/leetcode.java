@@ -39,7 +39,7 @@ public class leetcode {
 
     public static void main(String[] args) {
         leetcode m = new leetcode();
-        int[] nums = {1,2,4,3};
+        int[] nums = {1,4,3,4};
         int limit = 4;
         System.out.println(m.minMoves(nums, limit));
 }

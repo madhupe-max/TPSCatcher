@@ -108,12 +108,33 @@ public class leetcode2 {
         
     }
 
+
+    
+    
+    private static final int[]    VALUES  = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+    private static final String[] SYMBOLS = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+
+    public String intToRoman2(int num) {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < VALUES.length; i++) {
+            // Repeatedly subtract the current denomination while it still fits.
+            while (num >= VALUES[i]) {
+                sb.append(SYMBOLS[i]);
+                num -= VALUES[i];
+            }
+        }
+        return sb.toString();
+    }
+    
+    
+
     public static void main(String[] args) {
         leetcode2 m = new leetcode2();
         String s1 = "sea";
         String s2 = "eat";
         System.out.println(m.minimumDeleteSum(s1, s2));
         System.out.println(m.lengthOfLongestSubstring("abcabcbb"));
-        System.out.println(m.intToRoman(1001));
+        System.out.println(m.intToRoman2(1001));
     }
 }

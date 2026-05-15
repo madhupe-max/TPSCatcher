@@ -1,7 +1,7 @@
 package com.tpscatcher.fix;
 
 public class leetcode {
-     
+    //leetcode 1675 
     public int minMoves(int[] nums, int limit) {
         int n = nums.length;
         // diff[T] holds the change in "discount from baseline 2" at target T.

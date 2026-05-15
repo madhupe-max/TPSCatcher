@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class leetcode2 {
-     
+    //leetcode 583 
     public int minimumDeleteSum(String s1, String s2) {
         int m = s1.length();
         int n = s2.length();
@@ -37,17 +37,75 @@ public class leetcode2 {
 
         return dp[m][n];
     }
+    //leetcode 3
+    public int lengthOfLongestSubstring(String s) {
+        Map<Character, Integer> lastSeen = new HashMap<>();
 
-public int lengthOfLongestSubstring(String s) {
-        Map <String, Integer> seen = new HashMap<>();
-        int len=0;
-        for(int i=0; i< s.length(); i++){
-            if(seen.containsKey(""+s.chartAt(i))){
-                return seen.length;
+        int left = 0;
+        int maxLength = 0;
+
+        for (int right = 0; right < s.length(); right++) {
+            char c = s.charAt(right);
+
+            if (lastSeen.containsKey(c) && lastSeen.get(c) >= left) {
+                left = lastSeen.get(c) + 1;
             }
-            seen.put(s.charAt(i),i);
+
+            lastSeen.put(c, right);
+            maxLength = Math.max(maxLength, right - left + 1);
         }
-        return len;
+
+        return maxLength;
+    }
+    //leetcode 12
+    public String intToRoman(int num) {
+        String roman= "";
+
+        while (num>0) {
+            if (num >= 1000) {
+                roman += "M";
+                num -= 1000;
+            } else if (num >= 900) {
+                roman += "CM";
+                num -= 900;
+            } else if (num >= 500) {
+                roman += "D";
+                num -= 500;
+            } else if (num >= 400) {
+                roman += "CD";
+                num -= 400;
+            } else if (num >= 100) {
+                roman += "C";
+                num -= 100;
+            } else if (num >= 90) {
+                roman += "XC";
+                num -= 90;
+            } else if (num >= 50) {
+                roman += "L";
+                num -= 50;
+            } else if (num >= 40) {
+                roman += "XL";
+                num -= 40;
+            } else if (num >= 10) {
+                roman += "X";
+                num -= 10;
+            } else if (num >= 9) {
+                roman += "IX";
+                num -= 9;
+            } else if (num >= 5) {
+                roman += "V";
+                num -= 5;
+            } else if (num >= 4) {
+                roman += "IV";
+                num -= 4;
+            } else {
+                roman += "I";
+                num -= 1;
+            }
+        }
+
+        return roman;
+        
     }
 
     public static void main(String[] args) {
@@ -55,5 +113,7 @@ public int lengthOfLongestSubstring(String s) {
         String s1 = "sea";
         String s2 = "eat";
         System.out.println(m.minimumDeleteSum(s1, s2));
-}
+        System.out.println(m.lengthOfLongestSubstring("abcabcbb"));
+        System.out.println(m.intToRoman(1001));
+    }
 }
